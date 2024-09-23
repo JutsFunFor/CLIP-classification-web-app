@@ -1,0 +1,77 @@
+version: '3.7'
+
+services:
+  
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - elk_net
+
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.6.1
+    container_name: logstash
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+      - ./logs:/usr/share/logstash/logs:ro 
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5044:5044"
+    networks:
+      - elk_net
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.6.1
+    container_name: kibana
+    environment:
+      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+    networks:
+      - elk_net
+
+  training:
+    image: clip-training:latest
+    container_name: clip-training
+    environment:
+      - REGISTRY_DIR=/app/registry
+      - MODEL_REGISTRY_DIR=/app/model_registry
+      - LOGS_DIR=/app/logs
+    volumes:
+      - ./registry:/app/registry
+      - ./model_registry:/app/model_registry
+      - ./final_aug_dataset:/app/final_aug_dataset
+      - ./logs:/app/logs 
+    runtime: nvidia 
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    networks:
+      - elk_net
+
+networks:
+  elk_net:
+    driver: bridge
+
+volumes:
+  es_data:

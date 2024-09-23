@@ -1,0 +1,10 @@
+sudo docker run --rm -it  \
+	--gpus all    \
+	--shm-size=8g  \
+	-v $(pwd)/../shared/final_aug_dataset/annotations.csv:/app/final_aug_dataset/annotations.csv \
+	-v $(pwd)/../shared/logs:/app/logs   \
+	-v $(pwd)/../shared/model_registry:/app/model_registry \
+	-v $(pwd)/../shared/.cache/clip:/app/.cache/clip   \
+	-v $(pwd)/app.py:/app/app.py \
+	-p 8502:8502  \
+	clip-inference:latest

@@ -1,0 +1,13 @@
+batch_size: 32
+num_epochs: 5
+patience: 4
+num_workers: 12
+weight_decay: 0.00001 
+initial_lr: 0.0005
+gradient_clip_value: 1.0
+log_dir: "/app/runs/clip_model"
+dataset_path: "/app/final_aug_dataset"
+annotations_path: "/app/final_aug_dataset/annotations.csv"
+model_registry_dir: "/app/model_registry"
+model_weights_path: "/app/best_clip_finetuned.pth"
+registry_dir: "/app/registry"

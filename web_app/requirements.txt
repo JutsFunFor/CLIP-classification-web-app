@@ -1,0 +1,16 @@
+cython
+openai-clip
+torch
+torchvision
+datasets
+json-log-formatter
+tensorboard
+streamlit
+fuzzywuzzy
+pyyaml
+psutil
+matplotlib
+seaborn
+requests
+scikit-learn
+python-Levenshtein

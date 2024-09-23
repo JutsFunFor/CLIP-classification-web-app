@@ -1,0 +1,18 @@
+sudo docker run --rm -it \
+	--gpus all \
+	--shm-size=8g \
+	-v $(pwd)/../shared/final_aug_dataset:/app/final_aug_dataset \
+	-v $(pwd)/../shared/logs:/app/logs \
+	-v $(pwd)/../shared/model_registry:/app/model_registry \
+	-v $(pwd)/../shared/registry:/app/registry \
+	-v $(pwd)/../shared/runs:/app/runs \
+	-v $(pwd)/../shared/.cache/clip:/app/.cache/clip \
+	-v $(pwd)/train.py:/app/train.py \
+	-v $(pwd)/dataset.py:/app/dataset.py \
+	-v $(pwd)/main.py:/app/main.py \
+	-v $(pwd)/model.py:/app/model.py \
+	-v $(pwd)/test.py:/app/test.py \
+	-v $(pwd)/utils.py:/app/utils.py \
+	-v $(pwd)/config_docker.yaml:/app/config_docker.yaml \
+	-p 6006:6006 \
+	clip-training:latest
