@@ -10,7 +10,6 @@ import numpy as np
 import logging
 import json_log_formatter
 
-# JSON log formatter
 formatter = json_log_formatter.JSONFormatter()
 json_handler = logging.StreamHandler()
 json_handler.setFormatter(formatter)

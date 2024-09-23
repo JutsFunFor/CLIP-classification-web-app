@@ -6,15 +6,15 @@ from torch.utils.tensorboard import SummaryWriter
 import logging
 import json_log_formatter
 
-# JSON log formatter setup
+
 formatter = json_log_formatter.JSONFormatter()
 
-# Ensure log directory exists
-log_directory = "/app/logs"  # Change this path if necessary
+
+log_directory = "/app/logs" 
 if not os.path.exists(log_directory):
     os.makedirs(log_directory)
 
-# File handler setup for logging
+
 log_file_path = os.path.join(log_directory, "training.log")
 file_handler = logging.FileHandler(log_file_path)
 file_handler.setFormatter(formatter)
@@ -22,7 +22,7 @@ file_handler.setFormatter(formatter)
 logger = logging.getLogger("training_logger")
 logger.setLevel(logging.INFO)
 logger.addHandler(file_handler)
-logger.propagate = False  # Prevents duplicate logging if other handlers are added
+logger.propagate = False
 
 def train_and_validate(model, train_loader, val_loader, criterion, optimizer, config, device):
     writer = SummaryWriter(log_dir=config['log_dir'])

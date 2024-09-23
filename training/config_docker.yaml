@@ -1,3 +1,4 @@
+
 batch_size: 32
 num_epochs: 5
 patience: 4
@@ -11,3 +12,4 @@ annotations_path: "/app/final_aug_dataset/annotations.csv"
 model_registry_dir: "/app/model_registry"
 model_weights_path: "/app/best_clip_finetuned.pth"
 registry_dir: "/app/registry"
+rewrite_model_weights: False

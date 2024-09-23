@@ -57,7 +57,17 @@ services:
       - ./shared/registry:/app/registry
       - ./shared/model_registry:/app/model_registry
       - ./shared/final_aug_dataset:/app/final_aug_dataset
-      - ./shared/logs:/app/logs 
+      - ./shared/logs:/app/logs
+      - ./shared/.cache/clip:/app/.cache/clip
+      - ./shared/runs:/app/runs
+      - ./training/train.py:/app/train.py 
+      - ./training/dataset.py:/app/dataset.py 
+      - ./training/main.py:/app/main.py 
+      - ./training/model.py:/app/model.py 
+      - ./training/test.py:/app/test.py 
+      - ./training/utils.py:/app/utils.py 
+      - ./training/config_docker.yaml:/app/config_docker.yaml 
+
     runtime: nvidia 
     deploy:
       resources:
@@ -66,11 +76,13 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+    command: ["python3", "main.py"]
+    shm_size: '16g'
     networks:
       - elk_net
   
   inference:
-    image: clip-inference:lateset
+    image: clip-inference:latest
     container_name: clip-inference
     environment:
       - MODEL_REGISTRY_DIR=/app/model_registry
@@ -91,6 +103,9 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+    ports:
+      - "8502:8502"
+    shm_size: '16g'
     networks:
       - elk_net
       

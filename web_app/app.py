@@ -13,13 +13,12 @@ import torch.nn as nn
 import logging
 import json_log_formatter
 
-# Set up logging
+
 log_dir = os.getenv("LOG_DIR", "./logs")
 os.makedirs(log_dir, exist_ok=True)
 
 log_file_path = os.path.join(log_dir, 'inference.log')
 
-# JSON log formatter setup
 formatter = json_log_formatter.JSONFormatter()
 json_handler = logging.FileHandler(log_file_path)
 json_handler.setFormatter(formatter)
@@ -145,16 +144,20 @@ def run_single_inference(model, image_tensor, device):
     inference_time = time.time() - start_time
     return probabilities, inference_time
 
-# Load subcategories
 annotations_file = './final_aug_dataset/annotations.csv'
 annotations = pd.read_csv(annotations_file)
 subcategories = list(annotations['description'].unique())
+
+
 weights_path = './model_registry/best_model.pth'
 
-# Streamlit app code
+def check_weights(path):
+    return os.path.exists(path)
+
+
+# Streamlit 
 st.markdown("<h1 style='text-align: center; color: darkblue;'>Image Classification</h1>", unsafe_allow_html=True)
 
-# tab1 = st.tabs(["Classification"])
 
 def reset_statistics(log_path='user_stats.csv'):
     if os.path.exists(log_path):
@@ -167,7 +170,8 @@ if uploaded_image:
     image = Image.open(uploaded_image)
     st.image(image, caption="Uploaded Image", use_column_width=True)
 classify_button = st.button("Classify", help="Click to start classification", key='classify_button')
-if classify_button and uploaded_image and class_input:
+is_weights = check_weights(weights_path)
+if classify_button and uploaded_image and class_input and is_weights:
     image_name = uploaded_image.name
     is_match, predicted_class, probability, inference_time = classify_image(uploaded_image, class_input, weights_path, subcategories)
     cpu, ram_percent, ram_gb, gpu = log_resource_usage()
@@ -175,6 +179,9 @@ if classify_button and uploaded_image and class_input:
         st.success(f"Classification successful! Predicted class: {predicted_class}. Matches your input.")
     else:
         st.error(f"Classification failed. Predicted class: {predicted_class}. Does not match your input.")
-elif classify_button:
+elif classify_button and is_weights:
     st.warning("Please upload an image and enter the expected class.")
-
+elif is_weights == False:
+    msg = "No model weights in registry. Please start trainig process"
+    logger.info(msg)
+    st.warning(msg)

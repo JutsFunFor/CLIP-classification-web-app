@@ -10,7 +10,6 @@ def main():
     config = load_config('config.yaml')
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
-    # Load the test data loader
     _, _, test_loader, subcategories = get_dataloaders(config, config['registry_dir'], save_splits=False)
     
     clip_model, _ = clip.load("ViT-B/32", jit=False)

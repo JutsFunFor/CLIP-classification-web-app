@@ -39,6 +39,8 @@ def load_clip_model(device):
     clip_cache_dir = os.getenv("CLIP_CACHE_DIR", "/app/.cache/clip")
     os.makedirs(clip_cache_dir, exist_ok=True)
     
-    # Download the model to the specified cache directory if not already there
     clip_model, _ = clip.load("ViT-B/32", device=device, download_root=clip_cache_dir)
     return clip_model
+
+def check_weights(path):
+    return os.path.exists(path)
