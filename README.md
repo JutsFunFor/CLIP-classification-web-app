@@ -10,14 +10,18 @@ Dataset was collected as product images of random chosen brands.
 - Integration with ELK stack and Tensorboard for logging and monitoring.
 - Containerized deployment using Docker and Docker Compose.
 
-## Clone repository
+## Project architecture
+
+![Диаграмма без названия(2)](https://github.com/user-attachments/assets/7964c4f9-4e53-4ff8-af21-b19ea6f05b2d)
+
+## 1.Clone repository
 
 ```
 git clone https://github.com/JutsFunFor/CLIP-classification-web-app.git
 cd CLIP-classification-web-app
 ```
 
-## Download dataset
+## 2.Download dataset
 
 
 Dataset located in google drive and can be downloaded by following link:
@@ -58,7 +62,7 @@ me@me:~/Desktop/CLIP-classification-web-app$ tree -L 2.
 
 6 directories, 18 files
 ```
-## Build docker images for training and inference
+## 3.Build docker images for training and inference
 
 ```
 cd  ./training
@@ -153,7 +157,29 @@ Or Kibana page for visualizing both train and inference metrics
 
 ![Screenshot from 2024-09-24 00-16-57](https://github.com/user-attachments/assets/3750faa9-c2f5-4350-959a-3ddeae5c15f4)
 
+## 4.Customize process
+
+#### Modify training config according your available resources
+```
+cat ./training/config_docker.yaml
+```
+
+```
+batch_size: 32
+num_epochs: 5
+patience: 4
+num_workers: 12
+weight_decay: 0.00001 
+initial_lr: 0.0005
+gradient_clip_value: 1.0
+log_dir: "/app/runs/clip_model"
+dataset_path: "/app/final_aug_dataset"
+annotations_path: "/app/final_aug_dataset/annotations.csv"
+model_registry_dir: "/app/model_registry"
+model_weights_path: "/app/best_clip_finetuned.pth"
+registry_dir: "/app/registry"
+rewrite_model_weights: False
+```
 
 
 
- 
