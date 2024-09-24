@@ -140,7 +140,7 @@ me@me:~/Desktop/CLIP-classification-web-app/shared$ tree -L 2 .
  1) `logs` folder contains training.log and inference.log for further passing into ELK stack
  2) `model_registry` folder contains weights of fine-tuned model
  3) `registry` folder contains dataset indicies splitted into `train/val/test` (70/15/15)% and `dataset_metatada.json` file for dataset class distribution
- 4) `runs` folder contains `tensorbord` util log
+ 4) `runs` folder contains `tensorboard` utility log
 
 Tensorboard can be started from `./shared` folder with command 
 `tensorboard --logdir ./runs`
